@@ -22,7 +22,7 @@ const list = [{
 {
     id: 2,
     name: 'Zuul',
-    email: 'Zuul@gmail.com',
+    email: '',
     content: 'Added to reviewer:',
     tag: 'Zuul',
     info: [],
@@ -165,7 +165,7 @@ class CollapseOtherHeader extends React.Component{
                 <Row>
                     <Col span={8}>
                         {
-                            this.props.item.viewDiff ? (<Button type='text' size='small' className='button'>VIEW DIFF</Button>):null
+                            this.props.item.viewDiff ? (<Button type='text' size='small' className='button' onClick={e => e.stopPropagation()}>VIEW DIFF</Button>):null
                         }
                     </Col>
                     <Col span={16}>
