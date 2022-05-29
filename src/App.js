@@ -8,6 +8,7 @@ const { TabPane } = Tabs;
 const list = [{
     id: 1,
     name: 'Luigi Toscano',
+    email: 'Luigi@gmail.com',
     content: 'Uploaded path set 1.',
     tag: '',
     info: [],
@@ -21,6 +22,7 @@ const list = [{
 {
     id: 2,
     name: 'Zuul',
+    email: 'Zuul@gmail.com',
     content: 'Added to reviewer:',
     tag: 'Zuul',
     info: [],
@@ -34,6 +36,7 @@ const list = [{
 {
     id: 3,
     name: 'Luigi Toscano',
+    email: 'Luigi@gmail.com',
     content: 'Build succeeded (check pipeline).',
     tag: '',
     info: ['openstack-tox-molecule https://zuul.opendev.org/t/openstack/build/b218ec9b40b442a5874fc571e5d3b5e5 : SUCCESS in 3m 29s',
@@ -50,6 +53,7 @@ const list = [{
 {
     id: 4,
     name: 'Luigi Toscano',
+    email: 'Luigi@gmail.com',
     content: 'Uploaded path set 1.',
     tag: '',
     info: [],
@@ -59,13 +63,28 @@ const list = [{
     Workflow: undefined,
     VerifiedRemoved: true,
     viewDiff: false,
+    },
+    {
+        id: 5,
+        name: 'Sergii Golovatiuk',
+        email: 'SerG@gmail.com',
+        content: 'Added to reviewer:',
+        tag: 'Sergii Golovatiuk',
+        info: [],
+        time: 'Nov 30,2020 18:24',
+        Verified: undefined,
+        CodeReview: undefined,
+        Workflow: undefined,
+        VerifiedRemoved: false,
+        viewDiff: false,
     },];
 // 隐藏的数据
 const hiddenList = [{
     id: 99,
     name: 'Luigi Toscano',
+    email:'Luigi@Gmail.com',
     content: 'Added to reviewer:',
-    tag: '',
+    tag: 'Luigi Toscano',
     info: [],
     time: 'Nov 30,2020 18:24',
     Verified: undefined,
@@ -83,17 +102,25 @@ class CollapseHeader extends React.Component{
             showElem: true,
         }
     }
+    // 加上邮箱地址
+    popoverContent(item) {
+        return (<div>
+            <div>{item.name}</div>
+            <div>{ item.email }</div>
+        </div>
+        )
+    }
     render() {
         return (
             <div className='headerDiv'>
                 <Row gutter={16}>
-                    <Col span={4}>
+                    {/* <Col span={4}> */}
                         <span className='header_span'>
                             {this.props.item.name}
                         </span>
-                    </Col>
+                    {/* </Col> */}
 
-                    <Col span={20}>
+                    {/* <Col span={20}> */}
                     {
                         this.props.item.Verified ? (<Tag color="green" className='tag'>Verified +{ this.props.item.Verified}</Tag>):null
                     }
@@ -112,9 +139,9 @@ class CollapseHeader extends React.Component{
                         this.props.item.VerifiedRemoved?(<Tag color="#dadce0" className='tag'>Verified removed</Tag>):null}
                 
                         {
-                            this.props.activeId.indexOf(this.props.item.id + '') >= 0 ? null : (<div className='ellipsis'>{this.props.item.content}{ this.props.item.info[0]?" -" + this.props.item.info[0]:null }</div>)
+                        this.props.activeId.indexOf(this.props.item.id + '') >= 0 ? null : (<div className='ellipsis'>{this.props.item.content}{this.props.item.tag ? (<Popover content={this.popoverContent(this.props.item)} placement="right"><Tag className='Tag_content'>{this.props.item.tag}</Tag></Popover>):null }{ this.props.item.info[0]?" -" + this.props.item.info[0]:null }</div>)
                         }
-                    </Col>
+                    {/* </Col> */}
                 </Row>
             </div>
         )
@@ -257,6 +284,14 @@ class CollapseApp extends React.Component{
         });
     }
 
+    popoverContent(item) {
+        return (<div>
+            <div>{item.name}</div>
+            <div>{item.email}</div>
+        </div>
+        )
+    }
+
 
     render() {
         let hiddenLength = hiddenList.length;
@@ -289,7 +324,7 @@ class CollapseApp extends React.Component{
                                         return (
                                             <Panel header={this.renderCollapseHeader(item, this.state.isActive)}
                                                 extra={this.renderCollapseOtherHeader(item, index)} key={item.id}>
-                                                <p>{item.content}</p>
+                                                <p>{item.content}{item.tag ? (<Popover content={this.popoverContent(item)} placement="right"><Tag className='Tag_content'>{item.tag}</Tag></Popover>) : null}</p>
                                                 {this.renderUlList(item.info)}
                                             </Panel>
                                         )
@@ -300,7 +335,7 @@ class CollapseApp extends React.Component{
                                         return (
                                             <Panel header={this.renderCollapseHeader(item, this.state.isActive)}
                                                 extra={this.renderCollapseOtherHeader(item, index)} key={item.id}>
-                                                <p>{item.content}</p>
+                                                <p>{item.content}{item.tag ? (<Popover content={ this.popoverContent(item) } placement="right"><Tag className='Tag_content'>{item.tag}</Tag></Popover>) : null}</p>
                                                 {this.renderUlList(item.info)}
                                             </Panel>
                                         )
